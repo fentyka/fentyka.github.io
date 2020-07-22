@@ -19,9 +19,9 @@
     <script src="assets/js/dataTables/jquery.dataTables.js"></script>
     <script src="assets/js/dataTables/dataTables.bootstrap.js"></script>
     <!-- CHART STYLES-->
-    <script src="assets/baru/chart.js"></script>
+    <script src="assets/chart/chart.js"></script>
     <script src="assets/js/bootstrap.min.js"></script>
-    <script src="assets/baru/chartjs-plugin-zoom.js"></script>
+    <script src="assets/chart/chartjs-plugin-zoom.js"></script>
 </head>
 <body>
     <div id="page-wrapper">
@@ -578,7 +578,7 @@
 <!-- TABLE SCRIPT -->        
 <script>
 $(document).ready(function () {
-    $.getJSON("hasil.json", function(data){
+    $.getJSON("data/hasil.json", function(data){
         var rf = '';
         $.each(data, function(key, value){
         rf += '<tr>';
@@ -610,7 +610,7 @@ $(document).ready(function () {
 </script>
 <!-- //TABLE SCRIPT --> 
 <!-- CHART SCRIPT --> 
-<script src="hasil2.js"></script>
+<script src="data/hasil2.js"></script>
 <script>
     var ctx = document.getElementById('grafik').getContext('2d');
     var chart = new Chart(ctx, {
