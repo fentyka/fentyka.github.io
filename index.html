@@ -567,11 +567,11 @@
 <!-- TABLE SCRIPT -->        
 <script>
 $(document).ready(function () {
-    $.getJSON("bismillah.json", function(data){
+    $.getJSON("hasil.json", function(data){
         var rf = '';
         $.each(data, function(key, value){
         rf += '<tr>';
-        rf += '<td>'+value.no+'</td>';
+        rf += '<td>'+value.field1+'</td>';
         rf += '<td>'+value.data+'</td>';
         rf += '<td>'+value.name+'</td>';
         rf += '<td>'+value.ntree+'</td>';
@@ -599,7 +599,7 @@ $(document).ready(function () {
 </script>
 <!-- //TABLE SCRIPT --> 
 <!-- CHART SCRIPT --> 
-<script src="bismillah.js"></script>
+<script src="hasil.js"></script>
 <script>
     var ctx = document.getElementById('grafik').getContext('2d');
     var chart = new Chart(ctx, {
