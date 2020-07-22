@@ -1,0 +1,850 @@
+﻿<!DOCTYPE html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Skripsi" />
+    <meta name="author" content="Fentyka Ayu"/>
+    <title>SKRIPSI</title>
+    <!-- Bootstrap Styles-->
+    <link href="assets/css/bootstrap.css" rel="stylesheet" />
+    <!-- FontAwesome Styles-->
+    <link href="assets/css/font-awesome.css" rel="stylesheet" />
+    <!-- Custom Styles-->
+    <link href="assets/css/custom-styles.css" rel="stylesheet" />
+     <!-- Google Fonts-->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+     <!-- TABLE STYLES-->
+    <link href="assets/js/dataTables/dataTables.bootstrap.css" rel="stylesheet" />
+    <script src="assets/js/jquery-1.10.2.js"></script>  
+    <script src="assets/js/dataTables/jquery.dataTables.js"></script>
+    <script src="assets/js/dataTables/dataTables.bootstrap.js"></script>
+    <!-- CHART STYLES-->
+    <script src="assets/baru/chart.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/baru/chartjs-plugin-zoom.js"></script>
+</head>
+<body>
+    <div id="page-wrapper">
+    <br/><br/>
+        <div id="page-inner"> 
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- BOX -->
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 align="center">HASIL PENELITIAN</h3>
+                        </div>
+                        <div class="panel-body">
+                            <h4>Daftar isi</h4>                           
+                                <ol>
+                                    <li>Tabel Hasil Percobaan Seluruh Skenario</li>
+                                    <li>Grafik dan Tabel Perbandingan Sampling dan Impurity</li>
+                                    <li>Grafik dan Tabel Perbandingan Tuning Parameter</li>
+                                </ol>
+                            <h4>Data : <a href="https://drive.google.com/file/d/1liu_D_G3150xgF5jLEQz_Zf4qME5RxfM/view?usp=sharing" target="_blank">Klik Disini</a></h4>
+                            <h4>Proses Klasifikasi : <a href="https://colab.research.google.com/drive/1mz7zefbQVvsEvQOyadJNR_ITgfUMXGyN#scrollTo=ZMVf4hZjC8n6" target="_blank">Klik Disini</a></h4>
+                            <br/><br/>
+                        </div>
+                    </div>
+                    <!-- TABEL-->
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <h4 align="center"><b>Tabel Hasil Percobaan Seluruh Skenario</b></h4>
+                        </div>
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered table-hover" id="rf_table">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Data</th>
+                                            <th>Impurity</th>
+                                            <th>Ntree</th>
+                                            <th>Mtry</th>
+                                            <th>OOB Error</th>
+                                            <th>Accuracy</th>
+                                            <th>Precision</th>
+                                            <th>Recall</th>
+                                            <th>F1</th>
+                                            <th>Time</th>
+                                            <th>trueSD predSD</th>
+                                            <th>trueSD predSMP</th>
+                                            <th>trueSD predSMA</th>
+                                            <th>trueSMP predSD</th>
+                                            <th>trueSMP predSMP</th>
+                                            <th>trueSMP predSMA</th>
+                                            <th>trueSMA predSD</th>
+                                            <th>trueSMA predSMP</th>
+                                            <th>trueSMA predSMA</th>
+                                        </tr>
+                                    </thead>         
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Close tabel --->
+                    <br/><br/>
+                    <!-- GRAFIK 1 -->
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <h4 align="center"><b>Grafik Perbandingan Sampling</b></h4>
+                        </div>
+                        <div class="panel-body">
+                            <div class="form-row">
+                                <div class="form-group col-md-3">
+                                    <label for="jenissampling">Data</label>
+                                    <select class="form-control" id="jenissampling" name="jenissampling">
+                                        <option value="1">Tanpa Resampling</option>
+                                        <option value="2">Resampling SMOTE</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label for="jenisperforma">Performa</label>
+                                    <select class="form-control" id="jenisperforma" name="jenisperforma">
+                                        <option value="1">Akurasi</option>
+                                        <option value="2">Presisi</option>
+                                        <option value="3">Recall</option>
+                                        <option value="4">F1-Score</option>
+                                    </select>
+                                </div>
+                            </div><br>
+                            <button onclick="checkData()" class="btn btn-primary"><span class="fa fa-eye"></span> Tampilkan</button>
+                            <button onclick="clearData()" class="btn btn-danger"><span class="fa fa-trash"></span> Bersihkan Semua</button>
+                            <canvas id="grafik"></canvas>
+                            <br></br>
+                            <!-- //GRAFIK 1 -->
+                            <!-- Table Perbandingan Sampling dan Impurity-->
+                            <div class="col-md-12 col-sm-5">
+                                <div class="panel panel-default">
+                                    <!-- Sampling-->
+                                    <div class="panel-heading">
+                                        Perbandingan Sampling<hr>
+                                    </div> 
+                                    <div class="panel-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-striped table-bordered table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th rowspan="2">Sampling</th>
+                                                        <th class="text-center" colspan="3">Akurasi</th>
+                                                        <th class="text-center" colspan="3">Presisi</th>
+                                                        <th class="text-center" colspan="3">Recall</th>
+                                                        <th class="text-center" colspan="3">F1 Score</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Min</th>
+                                                        <th>Mean</th>
+                                                        <th>Max</th>
+                                                        <th>Min</th>
+                                                        <th>Mean</th>
+                                                        <th>Max</th>
+                                                        <th>Min</th>
+                                                        <th>Mean</th>
+                                                        <th>Max</th>
+                                                        <th>Min</th>
+                                                        <th>Mean</th>
+                                                        <th>Max</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <!-- Akurasi -->
+                                                        <td>Asli</td>
+                                                        <td>64.21%</td>
+                                                        <td>68.17%</td>
+                                                        <td>70.00%</td>
+                                                        <!-- Precision -->
+                                                        <td>37.55%</td>
+                                                        <td>43.02%</td>
+                                                        <td>47.13%</td>
+                                                        <!-- Recall -->
+                                                        <td>38.86%</td>
+                                                        <td>41.32%</td>
+                                                        <td>45.32%</td>
+                                                        <!-- F1 Score -->
+                                                        <td>36.09%</td>
+                                                        <td>38.76%</td>
+                                                        <td>42.17%</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Smote</td>
+                                                        <!-- Akurasi -->
+                                                        <td>73.73%</td>
+                                                        <td>83.35%</td>
+                                                        <td>87.80%</td>
+                                                        <!-- Precision -->
+                                                        <td>73.89%</td>
+                                                        <td>84.50%</td>
+                                                        <td>88.96%</td>
+                                                        <!-- Recall -->
+                                                        <td>73.76%</td>
+                                                        <td>83.47%</td>
+                                                        <td>87.88%</td>
+                                                        <!-- F1 Score -->
+                                                        <td>73.06%</td>
+                                                        <td>83.03%</td>
+                                                        <td>87.67%</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <!-- //Sampling -->
+                                    <!-- Impurity -->
+                                    <div class="panel-heading">
+                                        Perbandingan Impurity <hr>
+                                    </div> 
+                                    <div class="panel-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-striped table-bordered table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th rowspan="2">Impurity</th>
+                                                        <th class="text-center" colspan="3">Akurasi</th>
+                                                        <th class="text-center" colspan="3">Presisi</th>
+                                                        <th class="text-center" colspan="3">Recall</th>
+                                                        <th class="text-center" colspan="3">F1 Score</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Min</th>
+                                                        <th>Mean</th>
+                                                        <th>Max</th>
+                                                        <th>Min</th>
+                                                        <th>Mean</th>
+                                                        <th>Max</th>
+                                                        <th>Min</th>
+                                                        <th>Mean</th>
+                                                        <th>Max</th>
+                                                        <th>Min</th>
+                                                        <th>Mean</th>
+                                                        <th>Max</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <!-- Akurasi -->
+                                                        <td>Entropy</td>
+                                                        <td>65.79%</td>
+                                                        <td>76.00%</td>
+                                                        <td>87.27%</td>
+                                                        <!-- Precision -->
+                                                        <td>39.04%</td>
+                                                        <td>63.95%</td>
+                                                        <td>87.82%</td>
+                                                        <!-- Recall -->
+                                                        <td>38.86%</td>
+                                                        <td>62.52%</td>
+                                                        <td>87.31%</td>
+                                                        <!-- F1 Score -->
+                                                        <td>36.09%</td>
+                                                        <td>61.03%</td>
+                                                        <td>87.06%</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Gini</td>
+                                                        <!-- Akurasi -->
+                                                        <td>64.21%</td>
+                                                        <td>75.52%</td>
+                                                        <td>87.80%</td>
+                                                        <!-- Precision -->
+                                                        <td>37.55%</td>
+                                                        <td>63.58%</td>
+                                                        <td>88.96%</td>
+                                                        <!-- Recall -->
+                                                        <td>39.25%</td>
+                                                        <td>62.27%</td>
+                                                        <td>87.88%</td>
+                                                        <!-- F1 Score -->
+                                                        <td>36.20%</td>
+                                                        <td>60.77%</td>
+                                                        <td>87.67%</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <!-- // Impurity -->
+                                </div>
+                            </div>
+                            <!-- //Table Perbandingan Sampling dan Impurity -->
+                        </div>
+                    </div>
+                    <!-- //GRAFIK 1 -->
+                    <br/><br/>
+                    <!-- GRAFIK 2 -->
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <h4 align="center"><b>Grafik Perbandingan Tuning Parameter</b></h4>
+                        </div>
+                        <div class="panel-body">
+                            <div class="form-row">
+                                <div class="form-group col-md-3">
+                                    <label for="jenissampling2">Data</label>
+                                    <select class="form-control" id="jenissampling2" name="jenissampling2">
+                                        <option value="1">Tanpa Resampling</option>
+                                        <option value="2">Resampling SMOTE</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label for="mtry">Mtry</label>
+                                    <select class="form-control" id="mtry" name="mtry">
+                                        <option value="1">2</option>
+                                        <option value="2">5</option>
+                                        <option value="3">10</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label for="jenisperforma2">Performa</label>
+                                    <select class="form-control" id="jenisperforma2" name="jenisperforma2">
+                                        <option value="1">OOB Error</option>
+                                        <option value="2">Akurasi</option>
+                                        <option value="3">Presisi</option>
+                                        <option value="4">Recall</option>
+                                        <option value="5">F1-Score</option>
+                                    </select>
+                                </div>
+                            </div><br>
+                            <button onclick="grafikMtry()" class="btn btn-primary"><span class="fa fa-eye"></span> Tampilkan</button>
+                            <button onclick="clearDatamtry()" class="btn btn-danger"><span class="fa fa-trash"></span> Bersihkan</button>
+                            <canvas id="grafik2"></canvas>
+                        <!-- //GRAFIK 2 -->
+                        <br></br>
+                        <!-- Table Perbandingan Mtry dan Ntree-->
+                            <div class="col-md-12 col-sm-5">
+                                <div class="panel panel-default">
+                                    <!-- Mtry-->
+                                    <div class="panel-heading">
+                                        Perbandingan Mtry<hr>
+                                    </div> 
+                                    <div class="panel-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-striped table-bordered table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th rowspan="2">Mtry</th>
+                                                        <th class="text-center" colspan="3">OOB Error</th>
+                                                        <th class="text-center" colspan="3">Akurasi</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Min</th>
+                                                        <th>Mean</th>
+                                                        <th>Max</th>
+                                                        <th>Min</th>
+                                                        <th>Mean</th>
+                                                        <th>Max</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>2</td>
+                                                        <!-- OOB Error -->
+                                                        <td>64.21%</td>
+                                                        <td>68.17%</td>
+                                                        <td>70.00%</td>
+                                                        <!-- Akurasi -->
+                                                        <td>37.55%</td>
+                                                        <td>43.02%</td>
+                                                        <td>47.13%</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>5</td>
+                                                        <!-- OOB Error -->
+                                                        <td>64.21%</td>
+                                                        <td>68.17%</td>
+                                                        <td>70.00%</td>
+                                                        <!-- Akurasi -->
+                                                        <td>37.55%</td>
+                                                        <td>43.02%</td>
+                                                        <td>47.13%</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>10</td>
+                                                        <!-- OOB Error -->
+                                                        <td>64.21%</td>
+                                                        <td>68.17%</td>
+                                                        <td>70.00%</td>
+                                                        <!-- Akurasi -->
+                                                        <td>37.55%</td>
+                                                        <td>43.02%</td>
+                                                        <td>47.13%</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <!-- //Mtry -->
+                                    <!-- Mtry-->
+                                    <div class="panel-heading">
+                                        Perbandingan Ntree<hr>
+                                    </div> 
+                                    <div class="panel-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-striped table-bordered table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th rowspan="2">Ntree</th>
+                                                        <th class="text-center" colspan="3">OOB Error</th>
+                                                        <th class="text-center" colspan="3">Akurasi</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Min</th>
+                                                        <th>Mean</th>
+                                                        <th>Max</th>
+                                                        <th>Min</th>
+                                                        <th>Mean</th>
+                                                        <th>Max</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>10</td>
+                                                        <!-- OOB Error -->
+                                                        <td>64.21%</td>
+                                                        <td>68.17%</td>
+                                                        <td>70.00%</td>
+                                                        <!-- Akurasi -->
+                                                        <td>37.55%</td>
+                                                        <td>43.02%</td>
+                                                        <td>47.13%</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>20</td>
+                                                        <!-- OOB Error -->
+                                                        <td>64.21%</td>
+                                                        <td>68.17%</td>
+                                                        <td>70.00%</td>
+                                                        <!-- Akurasi -->
+                                                        <td>37.55%</td>
+                                                        <td>43.02%</td>
+                                                        <td>47.13%</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>30</td>
+                                                        <!-- OOB Error -->
+                                                        <td>64.21%</td>
+                                                        <td>68.17%</td>
+                                                        <td>70.00%</td>
+                                                        <!-- Akurasi -->
+                                                        <td>37.55%</td>
+                                                        <td>43.02%</td>
+                                                        <td>47.13%</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>40</td>
+                                                        <!-- OOB Error -->
+                                                        <td>64.21%</td>
+                                                        <td>68.17%</td>
+                                                        <td>70.00%</td>
+                                                        <!-- Akurasi -->
+                                                        <td>37.55%</td>
+                                                        <td>43.02%</td>
+                                                        <td>47.13%</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>50</td>
+                                                        <!-- OOB Error -->
+                                                        <td>64.21%</td>
+                                                        <td>68.17%</td>
+                                                        <td>70.00%</td>
+                                                        <!-- Akurasi -->
+                                                        <td>37.55%</td>
+                                                        <td>43.02%</td>
+                                                        <td>47.13%</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>60</td>
+                                                        <!-- OOB Error -->
+                                                        <td>64.21%</td>
+                                                        <td>68.17%</td>
+                                                        <td>70.00%</td>
+                                                        <!-- Akurasi -->
+                                                        <td>37.55%</td>
+                                                        <td>43.02%</td>
+                                                        <td>47.13%</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>70</td>
+                                                        <!-- OOB Error -->
+                                                        <td>64.21%</td>
+                                                        <td>68.17%</td>
+                                                        <td>70.00%</td>
+                                                        <!-- Akurasi -->
+                                                        <td>37.55%</td>
+                                                        <td>43.02%</td>
+                                                        <td>47.13%</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>80</td>
+                                                        <!-- OOB Error -->
+                                                        <td>64.21%</td>
+                                                        <td>68.17%</td>
+                                                        <td>70.00%</td>
+                                                        <!-- Akurasi -->
+                                                        <td>37.55%</td>
+                                                        <td>43.02%</td>
+                                                        <td>47.13%</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>100</td>
+                                                        <!-- OOB Error -->
+                                                        <td>64.21%</td>
+                                                        <td>68.17%</td>
+                                                        <td>70.00%</td>
+                                                        <!-- Akurasi -->
+                                                        <td>37.55%</td>
+                                                        <td>43.02%</td>
+                                                        <td>47.13%</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>150</td>
+                                                        <!-- OOB Error -->
+                                                        <td>64.21%</td>
+                                                        <td>68.17%</td>
+                                                        <td>70.00%</td>
+                                                        <!-- Akurasi -->
+                                                        <td>37.55%</td>
+                                                        <td>43.02%</td>
+                                                        <td>47.13%</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>200</td>
+                                                        <!-- OOB Error -->
+                                                        <td>64.21%</td>
+                                                        <td>68.17%</td>
+                                                        <td>70.00%</td>
+                                                        <!-- Akurasi -->
+                                                        <td>37.55%</td>
+                                                        <td>43.02%</td>
+                                                        <td>47.13%</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>250</td>
+                                                        <!-- OOB Error -->
+                                                        <td>64.21%</td>
+                                                        <td>68.17%</td>
+                                                        <td>70.00%</td>
+                                                        <!-- Akurasi -->
+                                                        <td>37.55%</td>
+                                                        <td>43.02%</td>
+                                                        <td>47.13%</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>500</td>
+                                                        <!-- OOB Error -->
+                                                        <td>64.21%</td>
+                                                        <td>68.17%</td>
+                                                        <td>70.00%</td>
+                                                        <!-- Akurasi -->
+                                                        <td>37.55%</td>
+                                                        <td>43.02%</td>
+                                                        <td>47.13%</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>1000</td>
+                                                        <!-- OOB Error -->
+                                                        <td>64.21%</td>
+                                                        <td>68.17%</td>
+                                                        <td>70.00%</td>
+                                                        <!-- Akurasi -->
+                                                        <td>37.55%</td>
+                                                        <td>43.02%</td>
+                                                        <td>47.13%</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <!-- //Ntree -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- CLOSE BOX -->
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- TABLE SCRIPT -->        
+<script>
+$(document).ready(function () {
+    $.getJSON("bismillah.json", function(data){
+        var rf = '';
+        $.each(data, function(key, value){
+        rf += '<tr>';
+        rf += '<td>'+value.no+'</td>';
+        rf += '<td>'+value.data+'</td>';
+        rf += '<td>'+value.name+'</td>';
+        rf += '<td>'+value.ntree+'</td>';
+        rf += '<td>'+value.mtry+'</td>';
+        rf += '<td>'+value.oob_error+'</td>';
+        rf += '<td>'+value.accuracy+'</td>';
+        rf += '<td>'+value.precision+'</td>';
+        rf += '<td>'+value.recall+'</td>';
+        rf += '<td>'+value.f1+'</td>';
+        rf += '<td>'+value.time+'</td>';
+        rf += '<td>'+value.trueSDpredSD+'</td>';
+        rf += '<td>'+value.trueSDpredSMP+'</td>';
+        rf += '<td>'+value.trueSDpredSMA+'</td>';
+        rf += '<td>'+value.trueSMPpredSD+'</td>';
+        rf += '<td>'+value.trueSMPpredSMP+'</td>';
+        rf += '<td>'+value.trueSMPpredSMA+'</td>';
+        rf += '<td>'+value.trueSMApredSD+'</td>';
+        rf += '<td>'+value.trueSMApredSMP+'</td>';
+        rf += '<td>'+value.trueSMApredSMA+'</td>';
+        rf += '</tr>';
+        });
+    $('#rf_table').append(rf).dataTable();
+    });
+});
+</script>
+<!-- //TABLE SCRIPT --> 
+<!-- CHART SCRIPT --> 
+<script src="bismillah.js"></script>
+<script>
+    var ctx = document.getElementById('grafik').getContext('2d');
+    var chart = new Chart(ctx, {
+        // The type of chart we want to create
+        type: 'line',
+        // The data for our dataset
+        data: {
+            datasets: []
+        },
+        // Configuration options go here
+        options: {
+            title: {
+                display: true,
+                text: 'Performa Klasifikasi'
+            },
+            plugins: {
+                zoom: {
+                    pan: {
+                        enabled: true,
+                        mode: 'y',
+                        rangeMin: {
+                            y: 0
+                        },
+                        rangeMax: {
+                        y: 1
+                        }
+                    },
+                    zoom: {
+                        enabled: true,
+                        mode: 'y',
+                        rangeMin: {
+                            y: 0
+                        },
+                        rangeMax: {
+                            y: 1
+                        }
+                    }
+                }
+            },
+            scales: {
+                yAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Nilai'
+                    },
+                    ticks: {
+                        max: 1,
+                        min: 0,
+                        stepSize: 0.05
+                    }
+                }],
+                xAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Splitting Attribute + Ntree + Mtry'
+                    }
+                }]
+            },
+        }
+    });
+    console.log(chart);
+    var currentIndex=0;
+    var currentItem=[];
+    var colorList=["#47e4bb","#ec9b3b","#e8647c","#723881","#216583","#000000"];
+    
+    function clearData(){
+        console.log("terpanggil",currentIndex);
+        for (var i = 0; i < currentIndex; i++) {
+            chart.data.datasets.pop();
+        }
+        currentIndex=0;
+        currentItem=[];
+        chart.update();
+    }
+    function checkData(performa=$('#jenisperforma').val(),
+    sampling=$('#jenissampling').val()
+    ){
+        if(sampling==="1"){var jenissampling="asli";}
+        else if(sampling==="2"){var jenissampling="smote";}
+        
+        if(performa==="1"){var jenisperforma="accuracy";}
+        else if(performa==="2"){var jenisperforma="precision";}
+        else if(performa==="3"){var jenisperforma="recall";}
+        else if(performa==="4"){var jenisperforma="f1";}
+
+        dataToCheck=jenissampling+jenisperforma;
+        if(currentItem.indexOf(dataToCheck) > -1){
+            alert("sudah ada");
+        }
+        else{
+            addData(jenissampling,jenisperforma);
+        }
+    }
+    function addData(jenissampling,jenisperforma){
+        var correct = [];
+        for(var i=0;i<168;i++){
+            if(datarf[i]["data"]===jenissampling){
+                correct.push(datarf[i]);
+            }
+        }
+        data=[];
+        labelisi=[];
+        for(i in correct){
+            data.push(correct[i][jenisperforma]);
+            labelisi.push(correct[i]["name"]+"."+correct[i]["ntree"]+"."+correct[i]["mtry"]);
+        }
+        var dataToAppend="Data = "+jenissampling+", Performa = "+jenisperforma;
+        chart.data.datasets[currentIndex]={
+            data:data,
+            label: dataToAppend,
+            borderColor: colorList[currentIndex%6],
+            backgroundColor:colorList[currentIndex%6],
+            fill: false
+        };
+        chart.data.labels = labelisi;
+        currentIndex+=1;
+        currentItem.push(dataToAppend);
+        chart.update();
+    }
+</script>
+<script>
+    var ctx2 = document.getElementById('grafik2').getContext('2d');
+    var chart2 = new Chart(ctx2, {
+        // The type of chart we want to create
+        type: 'line',
+        // The data for our dataset
+        data: {
+            datasets: []
+        },
+        // Configuration options go here
+        options: {
+            title: {
+                display: true,
+                text: 'Performa Klasifikasi'
+            },
+            plugins: {
+                zoom: {
+                    pan: {
+                        enabled: true,
+                        mode: 'y',
+                        rangeMin: {
+                            y: 0
+                        },
+                        rangeMax: {
+                        y: 1
+                        }
+                    },
+                    zoom: {
+                        enabled: true,
+                        mode: 'y',
+                        rangeMin: {
+                            y: 0
+                        },
+                        rangeMax: {
+                            y: 1
+                        }
+                    }
+                }
+            },
+            scales: {
+                yAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Nilai'
+                    },
+                    ticks: {
+                        max: 1,
+                        min: 0,
+                        stepSize: 0.05
+                    }
+                }],
+                xAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Ntree'
+                    }
+                }]
+            },
+        }
+    });
+
+    console.log(chart2);
+    var currentToIndex=0;
+    var currentToItem=[];
+    var colorToList=["#47e4bb","#ec9b3b","#e8647c","#723881","#216583","#000000"];
+    function clearDatamtry(){
+        console.log("panggil",currentToIndex);
+        for (var i = 0; i < currentToIndex; i++) {
+            chart2.data.datasets.pop();
+        }
+        currentToIndex=0;
+        currentToItem=[];
+        chart2.update();
+    }
+    function grafikMtry(performa=$('#jenisperforma2').val(),
+    sampling=$('#jenissampling2').val(), mcoba=$('#mtry').val()
+    ){
+        if(sampling==="1"){var jenissampling2="asli";}
+        else if(sampling==="2"){var jenissampling2="smote";}
+
+        if(mcoba==="1"){var mtry=2;}
+        else if(mcoba==="2"){var mtry=5;}
+        else if(mcoba==="3"){var mtry=10;}
+        
+        if(performa==="1"){var jenisperforma2="oob_error";}
+        else if(performa==="2"){var jenisperforma2="accuracy";}
+        else if(performa==="3"){var jenisperforma2="precision";}
+        else if(performa==="4"){var jenisperforma2="recall";}
+        else if(performa==="5"){var jenisperforma2="f1";}
+
+        dataCheck=jenissampling2+mtry+jenisperforma2;
+        if(currentToItem.indexOf(dataCheck) > -1){
+            alert("sudah ada");
+        }
+        else{
+            addMtry(jenissampling2,mtry,jenisperforma2);
+        }
+    }
+
+        function addMtry(jenissampling2,mtry,jenisperforma2){
+        var correct = [];
+        for(var i=0;i<168;i++){
+            if(datarf[i]["data"]===jenissampling2&&datarf[i]["mtry"]===mtry){
+                correct.push(datarf[i]);
+            }
+        }
+        data=[];
+        labelisi=[];
+        for(i in correct){
+            data.push(correct[i][jenisperforma2]);
+            labelisi.push(correct[i]["name"]+"."+correct[i]["ntree"]);
+        }
+        var dataAppend="Data = "+jenissampling2+", Mtry = "+mtry+", Performa = "+jenisperforma2;
+        chart2.data.datasets[currentToIndex]={
+            data:data,
+            label: dataAppend,
+            borderColor: colorToList[currentToIndex%6],
+            backgroundColor:colorToList[currentToIndex%6],
+            fill: false
+        };
+        chart2.data.labels = labelisi;
+        currentToIndex+=1;
+        currentToItem.push(dataAppend);
+        chart2.update();
+    }
+</script>
+</body>
+</html>
