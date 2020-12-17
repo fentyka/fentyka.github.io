@@ -105,6 +105,7 @@
                                         <option value="2">Presisi</option>
                                         <option value="3">Recall</option>
                                         <option value="4">F1-Score</option>
+                                        <option value="5">Time</option>
                                     </select>
                                 </div>
                             </div><br>
@@ -695,6 +696,7 @@ $(document).ready(function () {
         else if(performa==="2"){var jenisperforma="precision";}
         else if(performa==="3"){var jenisperforma="recall";}
         else if(performa==="4"){var jenisperforma="f1";}
+        else if(performa==="5"){var jenisperforma="time";}
 
         dataToCheck=jenissampling+jenisperforma;
         if(currentItem.indexOf(dataToCheck) > -1){
